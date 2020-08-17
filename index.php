@@ -16,15 +16,26 @@ if(isset($_POST['submit'])) {
 
     $dbh = null;
 
+
     unset($name);
-
-
-    // echo "<pre>";
-    // var_dump($_POST);
-    // echo "</pre>";
-
-
 }
+
+if(isset($_POST['method']) && ($_POST['method'] === 'put')) {
+    $id = $_POST["id"];
+    $id = htmlspecialchars($id,ENT_QUOTES);
+    $id =(int)$id;
+
+    $dbh = db_connect();
+
+    $sql = 'UPDATE tasks SET done = 1 WHERE id = ?';
+    $stmt = $dbh->prepare($sql);
+
+    $stmt->bindValue(1, $id, PDO::PARAM_INT);
+    $stmt->execute();
+
+    $dbh =null;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -45,7 +56,7 @@ if(isset($_POST['submit'])) {
 <?php
 $dbh = db_connect();
 
-$sql = 'SELECT id, name, done FROM tasks ORDER BY id DESC';
+$sql = 'SELECT id, name FROM tasks WHERE done = 0 ORDER BY id DESC';
 $stmt = $dbh->prepare($sql);
 $stmt->execute();
 $dbh =null;
