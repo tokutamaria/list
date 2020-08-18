@@ -1,5 +1,5 @@
 <?php
-
+// テストコード
 function db_connect(){
 
     try{
